@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> cephus.ai </title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e293b;
+    }
+
+    header h1 {
+      color: #38bdf8;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+    }
+
+    nav a:hover {
+      color: #38bdf8;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 20px;
+    }
+
+    .box {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+      text-align: center;
+    }
+
+    .box h2 {
+      margin-bottom: 15px;
+      font-size: 32px;
+    }
+
+    .box p {
+      margin-bottom: 20px;
+      color: #cbd5e1;
+    }
+
+    textarea {
+      width: 100%;
+      height: 130px;
+      border: none;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 16px;
+      resize: none;
+      outline: none;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+
+    .response {
+      margin-top: 20px;
+      background: #334155;
+      padding: 15px;
+      border-radius: 10px;
+      min-height: 80px;
+      text-align: left;
+      color: #e2e8f0;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-btn:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+      background: #020617;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Cephus AI</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="ai.html">AI Page</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="box">
+      <h2>Ask Cephus </h2>
+      <p>Type your question below and get a demo AI response.</p>
+
+      <textarea id="userInput" placeholder="Ask something like: What is photosynthesis?"></textarea>
+      <br>
+      <button onclick="askAI()">Ask AI</button>
+      <button onclick="clearText()">Clear</button>
+
+      <div class="response" id="responseBox">AI response will appear here...</div>
+
+      <a href="index.html" class="back-btn">← Back to Home</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 AI Assistant | School Project</p>
+  </footer>
+
+  <script>
+    const responses = {
+      "your name":"I am cephus what can I help you",
+      "photosynthesis": "Photosynthesis is the process where plants use sunlight, water, and carbon dioxide to make food and oxygen.",
+      "gravity": "Gravity is the force that pulls objects toward each other, especially toward the Earth.",
+      "ai": "AI stands for Artificial Intelligence. It allows machines to think, learn, and solve problems like humans.",
+      "computer": "A computer is an electronic device that processes data and performs tasks using programs.",
+      "water cycle": "The water cycle is the continuous movement of water through evaporation, condensation, and precipitation.",
+      "solar system": "The solar system includes the Sun and the planets that orbit around it.",
+      "human body": "The human body is made up of many systems such as the digestive, respiratory, and nervous systems.",
+      "html": "HTML stands for HyperText Markup Language. It is used to create the structure of web pages.",
+      "css": "CSS stands for Cascading Style Sheets. It is used to style web pages.",
+      "javascript": "JavaScript is a programming language used to make websites interactive.",
+      "python": "Python is a popular programming language used in AI, web development, and data science.",
+      "math": "Mathematics is the study of numbers, patterns, and problem solving.",
+      "biology": "Biology is the study of living organisms.",
+      "basketball" : "basketball is a sport where two teams try to score points by throwing a ball through a hoop.",
+      "physics": "Physics is the study of matter, energy, force, and motion.",
+      "chemistry": "Chemistry is the study of substances, elements, and reactions.",
+      "ethiopia": "Ethiopia is a country in East Africa known for its rich history and culture.",
+      "addis ababa": "Addis Ababa is the capital city of Ethiopia.",
+      "english": "English is one of the most widely spoken languages in the world.",
+      "history": "History is the study of past events and civilizations.",
+      "geography": "Geography is the study of the Earth, its places, and people.",
+      "science": "Science is the study of the natural world through observation and experiments.",
+      "earth": "Earth is the third planet from the Sun and the only known planet with life.",
+      "sun": "The Sun is a star at the center of our solar system.",
+      "moon": "The Moon is Earth's natural satellite.",
+      "mars": "Mars is known as the Red Planet.",
+      "jupiter": "Jupiter is the largest planet in the solar system.",
+      "saturn": "Saturn is famous for its beautiful rings.",
+      "venus": "Venus is the second planet from the Sun and is very hot.",
+      "mercury": "Mercury is the closest planet to the Sun.",
+      "neptune": "Neptune is the farthest known planet from the Sun.",
+      "uranus": "Uranus rotates on its side and is an ice giant.",
+      "pluto": "Pluto is classified as a dwarf planet.",
+      "atom": "An atom is the basic unit of matter.",
+      "cell": "A cell is the basic unit of life.",
+      "dna": "DNA carries genetic information in living organisms.",
+      "plant": "Plants are living organisms that make their own food using sunlight.",
+      "animal": "Animals are living organisms that eat plants or other animals.",
+      "mammal": "Mammals are animals that have hair or fur and feed milk to their young.",
+      "bird": "Birds are animals with feathers, wings, and beaks.",
+      "fish": "Fish are aquatic animals that usually breathe through gills.",
+      "reptile": "Reptiles are cold-blooded animals like snakes, lizards, and crocodiles.",
+      "amphibian": "Amphibians can live both in water and on land.",
+      "bacteria": "Bacteria are tiny single-celled organisms found almost everywhere.",
+      "virus": "A virus is a tiny infectious agent that needs a host to reproduce.",
+      "energy": "Energy is the ability to do work.",
+      "force": "Force is a push or pull on an object.",
+      "motion": "Motion is the change in position of an object over time.",
+      "speed": "Speed is how fast something moves.",
+      "1278+3526": "4,804.",
+      "thank you": "your welcome.",
+      "velocity": "Velocity is speed in a specific direction.",
+      "acceleration": "Acceleration is the rate at which velocity changes.",
+      "mass": "Mass is the amount of matter in an object.",
+      "weight": "Weight is the force of gravity acting on an object.",
+      "temperature": "Temperature measures how hot or cold something is.",
+      "heat": "Heat is the transfer of thermal energy from one object to another.",
+      "electricity": "Electricity is a form of energy caused by moving electrons.",
+      "magnet": "A magnet is an object that can attract iron and some other metals.",
+      "light": "Light is a form of energy that allows us to see.",
+      "sound": "Sound is a vibration that travels through air, water, or solids.",
+      "ecosystem": "An ecosystem is a community of living and nonliving things interacting together.",
+      "food chain": "A food chain shows how energy moves from one organism to another.",
+      "environment": "The environment includes all the natural surroundings where living things exist.",
+      "pollution": "Pollution is the introduction of harmful substances into the environment.",
+      "climate change": "Climate change is the long-term change in Earth's temperature and weather patterns.",
+      "recycling": "Recycling is the process of turning waste into reusable materials.",
+      "volcano": "A volcano is an opening in Earth's surface where lava can escape.",
+      "earthquake": "An earthquake is a sudden shaking of the ground caused by movement in Earth's crust.",
+      "rain": "Rain is water droplets that fall from clouds.",
+      "snow": "Snow is frozen water that falls from clouds as ice crystals.",
+      "cloud": "A cloud is a collection of tiny water droplets or ice crystals in the sky.",
+      "wind": "Wind is moving air.",
+      "river": "A river is a natural stream of flowing water.",
+      "ocean": "An ocean is a large body of salt water that covers much of Earth.",
+      "mountain": "A mountain is a large natural elevation of Earth's surface.",
+      "desert": "A desert is a dry area that gets very little rain.",
+      "forest": "A forest is a large area covered mainly with trees.",
+      "continent": "A continent is one of Earth's large landmasses.",
+      "africa": "Africa is the second-largest continent in the world.",
+      "asia": "Asia is the largest continent in the world.",
+      "europe": "Europe is a continent known for its rich history and many countries.",
+      "north america": "North America is a continent that includes countries like the USA, Canada, and Mexico.",
+      "south america": "South America is a continent known for the Amazon rainforest and Andes mountains.",
+      "australia": "Australia is both a country and a continent.",
+      "antarctica": "Antarctica is the coldest continent and is covered in ice.",
+      "internet": "The internet is a global network that connects computers and devices.",
+      "website": "A website is a collection of web pages available on the internet.",
+      "browser": "A browser is software used to access websites, like Chrome or Firefox.",
+      "coding": "Coding means writing instructions that a computer can understand.",
+      "programming": "Programming is the process of creating software using code.",
+      "algorithm": "An algorithm is a set of steps used to solve a problem.",
+      "database": "A database is a system used to store and organize information.",
+      "road": "A road is a path for vehicles and people to travel.",
+      "money": "Money is a medium of exchange used to buy goods and services.",
+      "robot": "A robot is a machine designed to perform tasks automatically.",
+      "machine learning": "Machine learning is a type of AI where computers learn from data.",
+      "nasa":"NASA (National Aeronautics and Space Administration) is an independent U.S. government agency for space science.",
+      "alien":"Extraterrestrial beings are hypothetical life forms that may exist outside Earth.",
+      "chatbot": "A chatbot is a program that can talk to users and answer questions.",
+      "school" : "school is a place where people, usually children and teenagers, go to learn knowledge.",
+      "teacher": "A teacher helps students learn new knowledge and skills.",
+      "student": "A student is a person who is learning.",
+      "hi":"Hello how can I help you today",
+      "oxygen": "Oxygen is a gas that humans and animals need to breathe.",
+      "carbon dioxide": "Carbon dioxide is a gas produced by respiration and used by plants.",
+      "phone": "A phone is a device used for communication over long distances.",
+      "technology": "Technology is the use of science to solve problems and make life easier.",
+      "invention": "An invention is a new device or method created to solve a problem.",
+      "innovation": "Innovation means improving or creating new ideas, products, or methods.",
+      "success": "Success is achieving a goal or desired result.",
+      "failure": "Failure is not achieving a goal but it helps you learn and improve.",
+      "goal": "A goal is something you want to achieve.",
+      "motivation": "Motivation is the reason that drives you to act.",
+      "teamwork": "Teamwork is working together to achieve a common goal.",
+      "leader": "A leader is someone who guides or directs others.",
+      "password": "A password is a secret word used to protect accounts.",
+      "hacker": "A hacker is someone who tries to gain unauthorized access to systems.",
+      "game": "A game is an activity done for fun or competition.",
+      "music": "Music is the art of arranging sounds to create harmony and rhythm.",
+      "movie": "A movie is a series of moving images that tell a story.",
+      "sport": "Sport is a physical activity done for competition or fun.",
+      "health": "Health is the state of being physically and mentally well.",
+      "exercise": "Exercise is physical activity that keeps the body fit.",
+      "sleep": "Sleep is a natural state of rest for the body and mind.",
+      "brain": "The brain is the organ that controls thoughts, memory, and actions.",
+      "heart": "The heart pumps blood throughout the body.",
+      "happy": "Happiness is a feeling of joy, contentment, and positive well-being.",
+      "sad": "Sadness is an emotion you feel when something disappointing or painful happens.",
+      "angry": "Anger is a strong feeling of displeasure or frustration.",
+      "excited": "Excitement is a feeling of enthusiasm and eagerness.",
+      "nervous": "Being nervous means feeling worried or uneasy about something.",
+      "scared": "Fear is an emotion felt when there is danger or threat.",
+      "love": "Love is a deep feeling of care, affection, and connection.",
+      "hate": "Hate is a strong feeling of dislike or hostility.",
+      "confused": "Confusion happens when you do not understand something clearly.",
+      "proud": "Feeling proud means being happy about your achievements or actions.",
+      "embarrassed": "Embarrassment is a feeling of self-consciousness or shame.",
+      "calm": "Calmness is a peaceful and relaxed state of mind.",
+      "bored": "Boredom happens when you are not interested or have nothing to do.",
+      "lonely": "Loneliness is the feeling of being alone or isolated.",
+      "motivated": "Motivation is the desire and energy to achieve something.",
+      "tired": "Tiredness is the feeling of needing rest or sleep.",
+      "jealous": "Jealousy is the feeling of envy toward someone else's success or possessions.",
+      "surprised": "Surprise is a feeling caused by something unexpected.",
+      "grateful": "Gratitude is the feeling of being thankful and appreciative.",
+      "blood": "Blood carries oxygen and nutrients in the body.",
+      "language": "Language is a system of communication using words or symbols.",
+      "culture": "Culture includes traditions, beliefs, and customs of a group of people.",
+      "religion": "Religion is a belief system about life, purpose, and the universe.",
+      "transport": "Transport is the movement of people or goods from one place to another.",
+      "car": "A car is a vehicle used for transportation on roads.",
+      "airplane": "An airplane is a vehicle that flies in the sky.",
+      "train": "A train is a vehicle that runs on tracks.",
+      "ship": "A ship is a large boat used to travel on water.",
+      "black hole": "A black hole is a region in space where gravity is so strong that nothing, not even light, can escape.",
+      "supernova": "A supernova is a powerful explosion that occurs at the end of a star's life cycle.",
+      "neutron star": "A neutron star is the collapsed core of a massive star, incredibly dense and mostly made of neutrons.",
+      "comet": "A comet is an icy object in space that releases gas and dust, forming a glowing tail when near the Sun.",
+      "asteroid": "An asteroid is a small rocky body orbiting the Sun, mostly found in the asteroid belt between Mars and Jupiter.",
+      "meteor": "A meteor is a space rock that burns up in Earth's atmosphere, creating a streak of light called a shooting star.",
+      "meteorite": "A meteorite is a piece of a meteor that survives the atmosphere and lands on Earth's surface.",
+      "galaxy": "A galaxy is a massive collection of stars, gas, dust, and dark matter bound together by gravity.",
+      "milky way": "The Milky Way is the galaxy that contains our solar system.",
+      "andromeda": "Andromeda is the nearest spiral galaxy to the Milky Way and is on a collision course with it in billions of years.",
+      "light year": "A light year is the distance light travels in one year, about 9.46 trillion kilometers.",
+      "orbit": "An orbit is the curved path of an object around a star, planet, or moon due to gravity.",
+      "telescope": "A telescope is an instrument used to observe distant objects in space.",
+      "space shuttle": "A space shuttle is a spacecraft used to transport astronauts and cargo to space.",
+      "road": "A road is a path for vehicles and people to travel.",
+      "traffic": "Traffic is the movement of vehicles on roads.",
+      "map": "A map is a visual representation of an area.",
+      "city": "A city is a large human settlement.",
+      "village": "A village is a small community of people.",
+      "country": "A country is a nation with its own government.",
+      "government": "A government is a system that rules a country.",
+      "law": "A law is a rule made by authorities that people must follow.",
+      "economy": "The economy is the system of money and trade in a country.",
+      "abenezer": "Abenezer is the owner of this Ai web page.",
+      "book": "A book is a written or printed work used for reading and learning.",
+      "library": "A library is a place where books and learning materials are kept.",
+      "exam": "An exam is a test used to measure knowledge or skill.",
+      "homework": "Homework is schoolwork given to students to do at home.",
+      "project": "A project is a task or assignment completed over time.",
+      "education": "Education is the process of learning knowledge, skills, and values.",
+      "chatgpt": "chatgpt is an AI assistant made by OpenAI.",
+      "artificial intelligence": "Artificial Intelligence is technology that enables machines to think, learn, and make decisions."
+      
+    };
+
+    function askAI() {
+      const input = document.getElementById("userInput").value.trim().toLowerCase();
+      const responseBox = document.getElementById("responseBox");
+
+      if (input === "") {
+        responseBox.innerHTML = "Please type a question first.";
+        return;
+      }
+
+      responseBox.innerHTML = "Thinking...";
+
+      setTimeout(() => {
+        let found = false;
+
+        for (let key in responses) {
+          if (input.includes(key)) {
+            responseBox.innerHTML = responses[key];
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          responseBox.innerHTML = "I don't understand that yet but I am learning";
+        }
+      }, 800);
+    }
+
+    function clearText() {
+      document.getElementById("userInput").value = "";
+      document.getElementById("responseBox").innerHTML = "AI response will appear here...";
+    }
+  </script>
+
+</body>
+</html>
